@@ -46,6 +46,17 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <inherited>true</inherited>
+        <configuration>
+          <arguments>-DskipTests</arguments>
+          <preparationGoals>clean install</preparationGoals>
+          <releaseProfiles>gpg-sign,jboss-release,release</releaseProfiles>
+          <tagNameFormat>@{project.version}</tagNameFormat>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
         <version>1.6.8</version>
