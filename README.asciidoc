@@ -6,12 +6,9 @@ This addon provides *standalone* functionality.
 [options="header"]
 |===
 |Addon |Exported |Optional
-|org.jboss.
+|org.jboss.forge.furnace.container:cdi
 |yes
 |no
-|DEP2
-|yes
-|yes
 |===
 
 == Setup
@@ -25,35 +22,19 @@ To use this addon, you must add it as a dependency in the *pom.xml* of your `for
 [source,xml]
 ----
 <dependency>
-   <groupId>org.mp.config</groupId>
-   <artifactId>mp-config</artifactId>
+   <groupId>org.jboss.forge.addon</groupId>
+   <artifactId>microprofile-config</artifactId>
    <classifier>forge-addon</classifier>
    <version>${version}</version>
 </dependency>
 ----
 == Features
-ABCFactory for simple ABC blah:: 
-Allows for blah blah
+Injection of ConfigProperties::
+This addon reads the `~/.forge/config.properties` files and makes it available for injection using `@ConfigProperty`
 +
 [source,java]
 ----
-@Inject private ABCFactory factory;
-ABC abc = factory.createABC();
-----
-+
-[TIP] 
-====
-If your addon uses a container that does not support "@Inject" annotations, services such as the `ABCFactory` may also be 
-accessed via the `AddonRegistry`:
-----
-Imported<ABCFactory> imported = addonRegistry.getServices(ABCFactory.class);
-ABCFactory factory = imported.get();
-----
-==== 
-Creating a new XYZ instance:: 
-Causes XYZ to occur
-+
-[source,java]
-----
-XYZ xyz = factory.createXYZ();
+@Inject
+@ConfigProperty
+private String name;
 ----
