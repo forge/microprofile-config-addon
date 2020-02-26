@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <groupId>org.jboss</groupId>
+    <artifactId>jboss-parent</artifactId>
+    <version>36</version>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jboss.forge.addon</groupId>
   <artifactId>microprofile-config</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
     <version.furnace>2.28.4.Final</version.furnace>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <version.forge>3.9.6.Final</version.forge>
     <version.smallrye-config>1.6.2</version.smallrye-config>
   </properties>
+  <licenses>
+    <license>
+      <name>Eclipse Public License version 1.0</name>
+      <url>http://www.eclipse.org/legal/epl-v10.html</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>gastaldi</id>
+      <name>George Gastaldi</name>
+      <email>gegastaldi@gmail.com</email>
+    </developer>
+  </developers>
   <build>
-    <finalName>mp-config</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
@@ -30,6 +44,17 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.8</version>
+        <extensions>true</extensions>
+        <configuration>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -83,4 +108,22 @@
       </build>
     </profile>
   </profiles>
+  <scm>
+    <connection>scm:git:git://github.com/forge/microprofile-config-addon.git</connection>
+    <developerConnection>scm:git:git@github.com:forge/microprofile-config-addon.git</developerConnection>
+    <url>http://github.com/forge/microprofile-config-addon</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
 </project>
