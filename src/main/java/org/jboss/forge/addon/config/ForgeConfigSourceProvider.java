@@ -16,13 +16,14 @@ import io.smallrye.config.PropertiesConfigSource;
 import org.eclipse.microprofile.config.spi.ConfigSource;
 import org.eclipse.microprofile.config.spi.ConfigSourceProvider;
 import org.jboss.forge.furnace.util.OperatingSystemUtils;
+import org.jboss.forge.furnace.util.Strings;
 
 public class ForgeConfigSourceProvider implements ConfigSourceProvider {
 
     private static final Logger log = Logger.getLogger(ForgeConfigSourceProvider.class.getName());
 
     private static final String USER_CONFIG_PATH = "org.jboss.forge.addon.configuration.USER_CONFIG_PATH";
-    private static final String CONFIGSOURCE_PROPERTIES_URL_KEY = "configsource.properties.url";
+    public static final String CONFIGSOURCE_PROPERTIES_URL_KEY = "configsource.properties.url";
 
     @Override
     public Iterable<ConfigSource> getConfigSources(ClassLoader forClassLoader) {
@@ -36,18 +37,20 @@ public class ForgeConfigSourceProvider implements ConfigSourceProvider {
                 log.log(Level.WARNING, "Could not read " + configProperties, e);
             }
             sources.add(new PropertiesConfigSource(props, configProperties.toString()));
-            String configSourcePropertiesUrl = props.getProperty(CONFIGSOURCE_PROPERTIES_URL_KEY);
-            if (configSourcePropertiesUrl != null) {
-                try {
-                    sources.add(new PropertiesConfigSource(new URL(configSourcePropertiesUrl)));
-                } catch (IOException e) {
-                    log.log(Level.WARNING, "Could not read " + configSourcePropertiesUrl, e);
+
+            String configSourcePropertiesUrl = props.getProperty(CONFIGSOURCE_PROPERTIES_URL_KEY, "");
+            for (String url : configSourcePropertiesUrl.split(",")) {
+                if (!Strings.isNullOrEmpty(url)) {
+                    try {
+                        sources.add(new PropertiesConfigSource(new URL(url)));
+                    } catch (IOException e) {
+                        log.log(Level.WARNING, "Could not read url: " + url + "(" + e.getMessage() + ")");
+                    }
                 }
             }
         }
         return sources;
     }
-
 
     private Path getConfigPropertiesPath() {
         String property = System.getProperty(USER_CONFIG_PATH);
